@@ -1,10 +1,12 @@
 require 'bankocr'
 
 DIGIT_WIDTH = 3
-LAST_MIDDLE_CHAR = 25
+NUMBER_OF_DIGITS = 9
+LINE_LENGTH = NUMBER_OF_DIGITS * DIGIT_WIDTH + 1
+LAST_MIDDLE_CHAR = NUMBER_OF_DIGITS * DIGIT_WIDTH - 2
 
 def read(input)
-  (0..8).inject(0) do |sum, position|
+  (0..NUMBER_OF_DIGITS - 1).inject(0) do |sum, position|
     sum + read_value(input, position)
   end
 end
@@ -14,8 +16,10 @@ def read_value(input, position)
 end
 
 def read_digit(input, position)
-  if input[LAST_MIDDLE_CHAR - DIGIT_WIDTH * position] == '_'
-    0
+  middle_char_offset = LAST_MIDDLE_CHAR - DIGIT_WIDTH * position
+  if input[middle_char_offset] == '_'
+    return 0 if input[middle_char_offset + LINE_LENGTH] == ' '
+    2
   else
     1
   end
@@ -100,4 +104,14 @@ describe BankOCR do
     expect(read(input)).to eq(100100101)
   end
 
+  it 'should recognize two' do
+    input = <<-END
+ _  _  _  _  _  _  _  _  _ 
+| || || || || || || || | _|
+|_||_||_||_||_||_||_||_||_ 
+
+    END
+
+    expect(read(input)).to eq(2)
+  end
 end
