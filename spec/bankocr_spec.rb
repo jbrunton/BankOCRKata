@@ -25,7 +25,7 @@ describe BankOCR do
 
   it 'should recognize zero' do
     input = <<-END
- _  _  _  _  _  _  _  _  _
+ _  _  _  _  _  _  _  _  _ 
 | || || || || || || || || |
 |_||_||_||_||_||_||_||_||_|
 
@@ -36,7 +36,7 @@ describe BankOCR do
 
   it 'should recognize one' do
     input = <<-END
- _  _  _  _  _  _  _  _
+ _  _  _  _  _  _  _  _    
 | || || || || || || || |  |
 |_||_||_||_||_||_||_||_|  |
 
@@ -47,7 +47,7 @@ describe BankOCR do
 
   it 'should recognize ten' do
     input = <<-END
- _  _  _  _  _  _  _     _
+ _  _  _  _  _  _  _     _ 
 | || || || || || || |  || |
 |_||_||_||_||_||_||_|  ||_|
 
@@ -58,7 +58,7 @@ describe BankOCR do
 
   it 'should recognise eleven' do
     input = <<-END
- _  _  _  _  _  _  _
+ _  _  _  _  _  _  _       
 | || || || || || || |  |  |
 |_||_||_||_||_||_||_|  |  |
 
@@ -69,7 +69,7 @@ describe BankOCR do
 
   it 'should recognise one hundred' do
     input = <<-END
- _  _  _  _  _  _     _  _
+ _  _  _  _  _  _     _  _ 
 | || || || || || |  || || |
 |_||_||_||_||_||_|  ||_||_|
 
@@ -80,7 +80,7 @@ describe BankOCR do
 
   it 'should recognise one hundred and one' do
     input = <<-END
- _  _  _  _  _  _     _
+ _  _  _  _  _  _     _    
 | || || || || || |  || |  |
 |_||_||_||_||_||_|  ||_|  |
 
@@ -91,7 +91,7 @@ describe BankOCR do
 
   it 'should recognise the highest value digit' do
     input = <<-END
-    _  _     _  _     _
+    _  _     _  _     _    
   || || |  || || |  || |  |
   ||_||_|  ||_||_|  ||_|  |
 
@@ -99,4 +99,5 @@ describe BankOCR do
 
     expect(read(input)).to eq(100100101)
   end
+
 end
