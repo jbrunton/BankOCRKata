@@ -4,7 +4,7 @@ DIGIT_WIDTH = 3
 LAST_MIDDLE_CHAR = 25
 
 def read(input)
-  [2,1,0].inject(0) do |sum, position|
+  (0..8).inject(0) do |sum, position|
     sum + read_value(input, position)
   end
 end
@@ -87,5 +87,16 @@ describe BankOCR do
     END
 
     expect(read(input)).to eq(101)
+  end
+
+  it 'should recognise the highest value digit' do
+    input = <<-END
+    _  _     _  _     _
+  || || |  || || |  || |  |
+  ||_||_|  ||_||_|  ||_|  |
+
+    END
+
+    expect(read(input)).to eq(100100101)
   end
 end
