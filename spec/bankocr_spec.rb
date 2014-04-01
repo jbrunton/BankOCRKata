@@ -3,7 +3,6 @@ require 'bankocr'
 DIGIT_WIDTH = 3
 NUMBER_OF_DIGITS = 9
 LINE_LENGTH = NUMBER_OF_DIGITS * DIGIT_WIDTH + 1
-LAST_MIDDLE_CHAR = NUMBER_OF_DIGITS * DIGIT_WIDTH - 2
 
 def read(input)
   (0..NUMBER_OF_DIGITS - 1).inject(0) do |sum, position|
@@ -16,13 +15,30 @@ def read_value(input, position)
 end
 
 def read_digit(input, position)
-  middle_char_offset = LAST_MIDDLE_CHAR - DIGIT_WIDTH * position
-  if input[middle_char_offset] == '_'
-    return 0 if input[middle_char_offset + LINE_LENGTH] == ' '
-    2
-  else
-    1
+  read_digit_char = lambda do |line, offset|
+    read_char(input, position, line, offset)
   end
+  if read_digit_char.(0, 1) == '_'
+    if read_digit_char.(1, 1) == ' '
+      return 0 if read_digit_char.(1, 0) == '|'
+      return 7
+    end
+    return 2 if read_digit_char.(2, 2) == ' '
+    return 3 if read_digit_char.(1, 0) == ' '
+    if read_digit_char.(2, 0) == ' '
+      return 5 if read_digit_char.(1, 2) == ' '
+      return 9
+    end
+    return 6 if read_digit_char.(1, 2) == ' '
+    8
+  else
+    return 1 if read_digit_char.(1, 0) == ' '
+    4
+  end
+end
+
+def read_char(input, position, line, offset)
+  return input[LINE_LENGTH * line + DIGIT_WIDTH * (NUMBER_OF_DIGITS - position - 1) + offset]
 end
 
 describe BankOCR do
@@ -113,5 +129,93 @@ describe BankOCR do
     END
 
     expect(read(input)).to eq(2)
+  end
+
+  it 'should recognize three' do
+    input = <<-END
+ _  _  _  _  _  _  _  _  _ 
+| || || || || || || || | _|
+|_||_||_||_||_||_||_||_| _|
+
+    END
+
+    expect(read(input)).to eq(3)
+  end
+
+  it 'should recognize four' do
+    input = <<-END
+ _  _  _  _  _  _  _  _    
+| || || || || || || || ||_|
+|_||_||_||_||_||_||_||_|  |
+
+    END
+
+    expect(read(input)).to eq(4)
+  end
+
+  it 'should recognize five' do
+    input = <<-END
+ _  _  _  _  _  _  _  _  _ 
+| || || || || || || || ||_ 
+|_||_||_||_||_||_||_||_| _|
+
+    END
+
+    expect(read(input)).to eq(5)
+  end
+
+  it 'should recognize six' do
+    input = <<-END
+ _  _  _  _  _  _  _  _  _ 
+| || || || || || || || ||_ 
+|_||_||_||_||_||_||_||_||_|
+
+    END
+
+    expect(read(input)).to eq(6)
+  end
+
+  it 'should recognize seven' do
+    input = <<-END
+ _  _  _  _  _  _  _  _  _ 
+| || || || || || || || |  |
+|_||_||_||_||_||_||_||_|  |
+
+    END
+
+    expect(read(input)).to eq(7)
+  end
+
+  it 'should recognize eight' do
+    input = <<-END
+ _  _  _  _  _  _  _  _  _ 
+| || || || || || || || ||_|
+|_||_||_||_||_||_||_||_||_|
+
+    END
+
+    expect(read(input)).to eq(8)
+  end
+
+  it 'should recognize nine' do
+    input = <<-END
+ _  _  _  _  _  _  _  _  _ 
+| || || || || || || || ||_|
+|_||_||_||_||_||_||_||_| _|
+
+    END
+
+    expect(read(input)).to eq(9)
+  end
+  
+  it 'should recognize any digit in any position' do
+    input = <<-END
+    _  _     _  _  _  _  _ 
+  | _| _||_||_ |_   ||_||_|
+  ||_  _|  | _||_|  ||_| _|
+                           
+    END
+    
+    expect(read(input)).to eq(123456789)
   end
 end
