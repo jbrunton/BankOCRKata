@@ -5,10 +5,7 @@ LAST_MIDDLE_CHAR = 25
 
 def read(input)
   if read_digit(input, 2) == 0
-    if read_digit(input, 1) == 0
-      return read_digit(input, 0)
-    end
-    return 10 + read_digit(input, 0)
+    return 10 * read_digit(input, 1) + read_digit(input, 0)
   end
   100 + read_digit(input, 0)
 end
