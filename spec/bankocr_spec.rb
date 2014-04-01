@@ -1,16 +1,24 @@
 require 'bankocr'
 
+DIGIT_WIDTH = 3
+LAST_MIDDLE_CHAR = 25
+
 def read(input)
-  last_digit_zero = input[25] == '_'
-  if input[19] == '_'
-    if input[22] == '_'
-      return 0 if last_digit_zero
-      return 1
+  if input[LAST_MIDDLE_CHAR - DIGIT_WIDTH * 2] == '_'
+    if input[LAST_MIDDLE_CHAR - DIGIT_WIDTH] == '_'
+      return read_last_digit(input)
     end
-    return 10 + 0 if last_digit_zero
-    return 10 + 1
+    return 10 + read_last_digit(input)
   end
   100
+end
+
+def read_last_digit(input)
+  if input[LAST_MIDDLE_CHAR] == '_'
+    0
+  else
+    1
+  end
 end
 
 describe BankOCR do
