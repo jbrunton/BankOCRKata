@@ -4,10 +4,9 @@ DIGIT_WIDTH = 3
 LAST_MIDDLE_CHAR = 25
 
 def read(input)
-  if read_digit(input, 2) == 0
-    return 10 * read_digit(input, 1) + read_digit(input, 0)
-  end
-  100 + read_digit(input, 0)
+  100 * read_digit(input, 2) +
+      10 * read_digit(input, 1) +
+      1 * read_digit(input, 0)
 end
 
 def read_digit(input, position)
