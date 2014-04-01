@@ -4,9 +4,13 @@ DIGIT_WIDTH = 3
 LAST_MIDDLE_CHAR = 25
 
 def read(input)
-  100 * read_digit(input, 2) +
-      10 * read_digit(input, 1) +
-      1 * read_digit(input, 0)
+  [2,1,0].inject(0) do |sum, position|
+    sum + read_value(input, position)
+  end
+end
+
+def read_value(input, position)
+  10**position * read_digit(input, position)
 end
 
 def read_digit(input, position)
