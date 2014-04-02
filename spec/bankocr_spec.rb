@@ -55,6 +55,10 @@ def get_decimal_digit(number, digit)
   number % 10**(digit + 1) / 10**digit
 end
 
+def valid_account?(account_number)
+  checksum(account_number) == 0
+end
+
 describe BankOCR do
   context 'reading numbers' do
     it 'should recognize zero' do
@@ -257,6 +261,20 @@ describe BankOCR do
       it "should give #{expected_checksum} for the account number #{account_number}" do
         expect(checksum(account_number)).to eq(expected_checksum)
       end
+    end
+  end
+  
+  context 'valid_account?' do
+    it 'should return true for 0' do
+      expect(valid_account?(0)).to eq(true)
+    end
+    
+    it 'should return true for 123456789' do
+      expect(valid_account?(123456789)).to eq(true)
+    end
+    
+    it 'should return false for 987654321' do
+      expect(valid_account?(987654321)).to eq(false)
     end
   end
 end
